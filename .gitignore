@@ -1,0 +1,13 @@
+bin
+pkg
+src/cloud.google.com
+src/github.com
+src/gscp/vendor
+src/golang.org
+src/gopkg.in
+src/go.uber.org
+src/sourcegraph.com
+src/go.opencensus.io
+src/google.golang.org
+gscp-*-*
+auth.json
