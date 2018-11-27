@@ -1,4 +1,4 @@
-VERSION := 1.0.0
+VERSION := 1.1.0
 PKG := gscp
 COMMIT := $(shell git rev-parse HEAD)
 BUILD_TIME := $(shell date -u +%FT%T)
@@ -74,7 +74,7 @@ clean:
 	rm -rf bin
 	find src/* -maxdepth 0 ! -name '$(PKG)' -type d | xargs rm -rf
 	rm -rf src/$(PKG)/vendor/
-	 
+
 lint: bin/golangci-lint
 	bin/golangci-lint run src/$(PKG)/...
 	find src/$(PKG) -not -path "./src/$(PKG)/vendor/*" -name '*.go' | xargs gofmt -w -s

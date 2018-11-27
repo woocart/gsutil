@@ -18,6 +18,7 @@ var app = kingpin.New("gscp", "Copies data from and to Google Cloud Storage")
 
 var from = app.Arg("from", "where to read from: gs://bucketname/path or - from stdin or /path/ for local file").Required().String()
 var to = app.Arg("to", "Where to write to: gs://bucketname/path or - to stdout or /path/ for local file").Required().String()
+var metadata = pipeline.Metadata(app.Arg("metadata", "KV pairs to append to uploaded object"))
 
 func main() {
 	app.Author("dz0ny")
@@ -38,7 +39,7 @@ func main() {
 		log.Fatal("Copying beetwen bucket is not yet supported.")
 	}
 	if reflect.ValueOf(in.Reader).IsNil() {
-		log.Fatalf("%s does not exsist.", in.Path)
+		log.Fatalf("%s does not exist.", in.Path)
 	}
 
 	if (in.IsStdio() && out.IsCloud()) || (in.IsCloud() && out.IsStdio()) {
@@ -53,6 +54,11 @@ func main() {
 				log.Fatal(err)
 			}
 		default:
+		}
+		if out.IsCloud() {
+			if _, err = out.Object.Update(ctx, storage.ObjectAttrsToUpdate{Metadata: metadata}); err != nil {
+				log.Fatal(err)
+			}
 		}
 		log.Debugf("Copying done from %s to %s", in, out)
 	}

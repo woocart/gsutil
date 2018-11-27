@@ -14,5 +14,21 @@ Download gscp from `Releases`
 
 ```shell
 echo "test" | gscp stdio gs://bucket/test/files   # read from stdin
+echo "test" | gscp stdio gs://bucket/test/files key=value # set custom metadata
 gscp gs://bucket/test/files stdio  # read to stdout
+```
+
+```shell
+usage: gscp [<flags>] <from> <to> [<metadata>...]
+
+Copies data from and to Google Cloud Storage
+
+Flags:
+  --help     Show context-sensitive help (also try --help-long and --help-man).
+  --version  Show application version.
+
+Args:
+  <from>        where to read from: gs://bucketname/path or - from stdin or /path/ for local file
+  <to>          Where to write to: gs://bucketname/path or - to stdout or /path/ for local file
+  [<metadata>]  KV pairs to append to uploaded object
 ```

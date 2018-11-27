@@ -23,6 +23,7 @@ type Pipeline struct {
 	Path   string
 	Reader io.Reader
 	Writer io.Writer
+	Object *storage.ObjectHandle
 }
 
 // NewPipeline creates new IO operation object
@@ -46,7 +47,8 @@ func NewPipeline(ctx context.Context, input string) (*Pipeline, error) {
 
 		p.Bucket = client.Bucket(u.Host)
 		p.Path = strings.TrimPrefix(u.Path, "/")
-		p.Writer = p.Bucket.Object(p.Path).NewWriter(ctx)
+		p.Object = p.Bucket.Object(p.Path)
+		p.Writer = p.Object.NewWriter(ctx)
 		p.Reader, _ = p.Bucket.Object(p.Path).NewReader(ctx)
 		return p, nil
 	}
