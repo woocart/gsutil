@@ -1,4 +1,4 @@
-VERSION := 1.1.0
+VERSION := 1.1.1
 PKG := gscp
 COMMIT := $(shell git rev-parse HEAD)
 BUILD_TIME := $(shell date -u +%FT%T)
@@ -27,7 +27,7 @@ endef
 
 .PHONY: $(TARGETS)
 $(TARGETS):
-	env GOOS=$(goos) GOARCH=$(goarch) go build --ldflags '-s -w $(version_flags)' -o $(output) $(PKG)
+	env GOOS=$(goos) GOARCH=$(goarch) go build -trimpath --ldflags '-s -w $(version_flags)' -o $(output) $(PKG)
 
 #
 # Build all defined targets
@@ -42,20 +42,8 @@ install: build
 	sudo mv $(CURRENT_TARGET) /usr/local/bin/$(PKG)
 
 #
-# Install locked dependecies
-#
-ensure: bin/dep
-	cd src/$(PKG); dep ensure
-
-#
 # Update all locked dependecies
 #
-update: bin/dep
-	cd src/$(PKG); dep ensure -update
-
-bin/dep:
-	go get -u github.com/golang/dep/cmd/dep
-
 bin/github-release:
 	go get -u github.com/aktau/github-release
 
